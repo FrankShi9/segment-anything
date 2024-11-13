@@ -8,11 +8,11 @@ from setuptools import find_packages, setup
 
 setup(
     name="segment_anything",
-    version="1.0",
+    version="1.01",
     install_requires=[],
     packages=find_packages(exclude="notebooks"),
     extras_require={
-        "all": ["matplotlib", "pycocotools", "opencv-python", "onnx", "onnxruntime"],
+        "all": ["matplotlib", "pycocotools", "opencv-python", "onnx", "onnxruntime", "loralib"],
         "dev": ["flake8", "isort", "black", "mypy"],
     },
 )
