@@ -7,6 +7,7 @@
 import torch
 from torch import nn
 from torch.nn import functional as F
+import loralib as lora
 
 from typing import List, Tuple, Type
 
@@ -48,7 +49,7 @@ class MaskDecoder(nn.Module):
 
         self.iou_token = nn.Embedding(1, transformer_dim)
         self.num_mask_tokens = num_multimask_outputs + 1
-        self.mask_tokens = nn.Embedding(self.num_mask_tokens, transformer_dim)
+        self.mask_tokens = lora.Embedding(self.num_mask_tokens, transformer_dim, r=32)
 
         self.output_upscaling = nn.Sequential(
             nn.ConvTranspose2d(transformer_dim, transformer_dim // 4, kernel_size=2, stride=2),
@@ -164,7 +165,7 @@ class MLP(nn.Module):
         self.num_layers = num_layers
         h = [hidden_dim] * (num_layers - 1)
         self.layers = nn.ModuleList(
-            nn.Linear(n, k) for n, k in zip([input_dim] + h, h + [output_dim])
+            lora.Linear(n, k) for n, k in zip([input_dim] + h, h + [output_dim], r=16)
         )
         self.sigmoid_output = sigmoid_output
 
