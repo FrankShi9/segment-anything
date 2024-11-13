@@ -7,6 +7,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import loralib as lora
 
 from typing import Optional, Tuple, Type
 
@@ -210,7 +211,7 @@ class Attention(nn.Module):
         self.scale = head_dim**-0.5
 
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
-        self.proj = nn.Linear(dim, dim)
+        self.proj = lora.Linear(dim, dim, r=16)
 
         self.use_rel_pos = use_rel_pos
         if self.use_rel_pos:
