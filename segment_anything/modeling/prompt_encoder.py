@@ -7,6 +7,7 @@
 import numpy as np
 import torch
 from torch import nn
+import loralib as lora
 
 from typing import Any, Optional, Tuple, Type
 
@@ -52,10 +53,10 @@ class PromptEncoder(nn.Module):
             nn.Conv2d(1, mask_in_chans // 4, kernel_size=2, stride=2),
             LayerNorm2d(mask_in_chans // 4),
             activation(),
-            nn.Conv2d(mask_in_chans // 4, mask_in_chans, kernel_size=2, stride=2),
+            lora.Conv2d(mask_in_chans // 4, mask_in_chans, kernel_size=2, stride=2, r=16),
             LayerNorm2d(mask_in_chans),
             activation(),
-            nn.Conv2d(mask_in_chans, embed_dim, kernel_size=1),
+            lora.Conv2d(mask_in_chans, embed_dim, kernel_size=1, r=16),
         )
         self.no_mask_embed = nn.Embedding(1, embed_dim)
 
